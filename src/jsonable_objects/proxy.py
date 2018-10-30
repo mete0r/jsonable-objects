@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   jsonable-objects: JSON-able objects
-#   Copyright (C) 2015-2018 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2015-2017 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -19,20 +19,20 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-from unittest import TestCase
+
+from zope.interface import implementer
+
+from .interfaces import IJsonable
 
 
-class RecipeTest(TestCase):
+@implementer(IJsonable)
+class JsonableProxy(object):
 
-    def test_install_and_update(self):
-        from jsonable_objects.recipe import Recipe
-        buildout = {}
-        options = {}
-        recipe = Recipe(buildout, 'foo', options)
-        recipe.install()
-        recipe.update()
+    __slots__ = ['__jsonable__']
 
-    def test_uninstall(self):
-        from jsonable_objects.recipe import uninstall
-        options = {}
-        uninstall('foo', options)
+    def __init__(self, jsonable):
+        self.__jsonable__ = jsonable
+
+    @classmethod
+    def validate(cls, jsonable):
+        return cls(jsonable)

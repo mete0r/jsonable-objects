@@ -20,23 +20,23 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from unittest import TestCase
-import logging
-import io
-import os.path
+
+from zope.interface import providedBy
 
 
-from .utils import isolated_directory
+class JsonableProxyTest(TestCase):
 
+    def test_proxy(self):
+        from jsonable_objects.proxy import JsonableProxy
+        from jsonable_objects.interfaces import IJsonable
 
-class AppTest(TestCase):
+        d = {
+            'foo': 1,
+            'bar': 'abc',
+        }
+        jsonable = JsonableProxy.validate(d)
 
-    @property
-    def logger(self):
-        name = self.id()
-        return logging.getLogger(name)
-
-    @isolated_directory
-    def test_nothing(self, isolated_directory):
-        self.logger.debug('test!')
-        with io.open(os.path.join(isolated_directory, 'foo.txt'), 'wb'):
-            pass
+        self.assertEquals(d, jsonable.__jsonable__)
+        self.assertTrue(
+            IJsonable in list(providedBy(jsonable))
+        )

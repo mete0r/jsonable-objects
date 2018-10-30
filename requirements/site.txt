@@ -4,3 +4,4 @@
 #
 #    pip-compile --output-file requirements/site.txt requirements.in requirements/site.in
 #
+zope.interface==4.6.0

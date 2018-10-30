@@ -17,20 +17,13 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from __future__ import absolute_import
+from __future__ import print_function
 from __future__ import unicode_literals
 
-
-class Recipe:
-
-    def __init__(self, buildout, name, options):
-        pass
-
-    def install(self):
-        return tuple()
-
-    def update(self):
-        return tuple()
+from zope.interface import Attribute
+from zope.interface import Interface
 
 
-def uninstall(name, options):
-    pass
+class IJsonable(Interface):
+
+    __jsonable__ = Attribute('JSON-able object.')

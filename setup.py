@@ -18,7 +18,6 @@
 #
 from __future__ import with_statement
 from contextlib import contextmanager
-from distutils.command.build import build as _build
 import io
 import os.path
 import re
@@ -89,8 +88,6 @@ def alltests():
     return unittest.TestSuite(suites)
 
 
-setup_requires = readfile('requirements/setup.in')
-
 install_requires_filename = 'requirements.in'
 install_requires = readfile(install_requires_filename)
 
@@ -106,24 +103,15 @@ setup_info = {
 
     'author': 'mete0r',
     'author_email': 'mete0r@sarangbang.or.kr',
-    'license': 'GNU Affero General Public License v3 or later (AGPLv3+)',
-    # 'url': 'https://github.com/mete0r/jsonable-objects',
+    'license': 'GNU Lesser General Public License v3 or later (LGPLv3+)',
+    'url': 'https://github.com/mete0r/jsonable-objects',
 
     'packages': [
         'jsonable_objects',
-        'jsonable_objects.recipe',
     ],
     # do not use '.'; just omit to specify setup.py directory
     'package_dir': {
         '': 'src',
-    },
-    'package_data': {
-        'jsonable_objects': [
-            'locale/*/*/*.mo',
-        ],
-        # 'jsonable_objects.tests': [
-        #   'files/*',
-        # ],
     },
     'install_requires': install_requires,
     'test_suite': '__main__.alltests',
@@ -131,46 +119,21 @@ setup_info = {
     'extras_require': {
         'test': tests_require,
     },
-    'setup_requires': setup_requires,
-    'message_extractors': {
-        'src/jsonable_objects': [
-            ('**.py', 'python', None),
-        ]
-    },
-    'entry_points': {
-        'console_scripts': [
-            'jsonable-objects = jsonable_objects.cli:main',
-        ],
-        'zc.buildout': [
-            'default = jsonable_objects.recipe:Recipe',
-        ],
-        'zc.buildout.uninstall': [
-            'default = jsonable_objects.recipe:uninstall',
-        ],
-        'paste.app_factory': [
-            'main = jsonable_objects.wsgi:app_factory',
-        ],
-    },
     'classifiers': [
         'Development Status :: 1 - Planning',
-        # 'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',  # noqa
-        # 'Operating System :: OS Independent',
-        # 'Programming Language :: Python',
-        # 'Programming Language :: Python :: 2.7',
-        # 'Programming Language :: Python :: 3.4',
-        # 'Programming Language :: Python :: Implementation :: CPython',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',  # noqa
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: Implementation :: CPython',
     ],
     'keywords': [
+        'json',
     ],
     'zip_safe': False,
 }
-
-
-class build(_build):
-    def run(self):
-        self.run_command('compile_catalog')
-        _build.run(self)
 
 
 project_root_directory = os.path.abspath(os.path.dirname(__file__))
@@ -180,9 +143,6 @@ requirements_path = 'requirements.txt'
 @setup_dir
 def main():
     setuptools = import_setuptools()
-    setup_info['cmdclass'] = {
-        'build': build,
-    }
     setuptools.setup(**setup_info)
 
 
