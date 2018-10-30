@@ -1,10 +1,10 @@
 Command-line interface
 ======================
 
-METE0R-PROJECT
+jsonable-objects
 --------------
 
 .. argparse::
-   :module: METE0R_PACKAGE.cli
+   :module: jsonable_objects.cli
    :func: main_argparse
-   :prog: METE0R-PROJECT
+   :prog: jsonable-objects

@@ -1,9 +1,9 @@
 [run]
 branch = True
-source = METE0R_PACKAGE
+source = jsonable_objects
 
 [paths]
 source =
-	src/METE0R_PACKAGE
-	.tox/*/lib/python*/site-packages/METE0R_PACKAGE
-	.tox/pypy*/site-packages/METE0R_PACKAGE
+	src/jsonable_objects
+	.tox/*/lib/python*/site-packages/jsonable_objects
+	.tox/pypy*/site-packages/jsonable_objects

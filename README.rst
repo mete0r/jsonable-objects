@@ -1,7 +1,7 @@
-METE0R-PROJECT
+jsonable-objects
 ==============
 
-SOME_DESCRIPTION
+JSON-able objects
 
 
 Production environment
