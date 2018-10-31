@@ -19,6 +19,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+import json
 
 from zope.interface import implementer
 
@@ -32,6 +33,15 @@ class JsonableProxy(object):
 
     def __init__(self, jsonable):
         self.__jsonable__ = jsonable
+
+    def __repr__(self):
+        return '{}({})'.format(
+            type(self).__name__,
+            json.dumps(
+                self.__jsonable__,
+                sort_keys=True,
+            )
+        )
 
     @classmethod
     def validate(cls, jsonable):

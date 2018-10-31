@@ -40,3 +40,18 @@ class JsonableProxyTest(TestCase):
         self.assertTrue(
             IJsonable in list(providedBy(jsonable))
         )
+
+    def test_repr(self):
+        from jsonable_objects.proxy import JsonableProxy
+
+        class Foo(JsonableProxy):
+            pass
+
+        foo = Foo({
+            'foo': 123,
+            'bar': 456,
+        })
+        self.assertEquals(
+            'Foo({"bar": 456, "foo": 123})',
+            repr(foo)
+        )

@@ -4,7 +4,7 @@ Changes
 0.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add `JsonableProxy.__repr__()`
 
 
 0.1.1 (2018-10-31)
