@@ -1,7 +1,7 @@
 Changes
 =======
 
-0.1.1 (unreleased)
+0.1.1 (2018-10-31)
 ------------------
 
 - Correct COPYING files.
