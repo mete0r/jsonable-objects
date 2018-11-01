@@ -27,3 +27,12 @@ from zope.interface import Interface
 class IJsonable(Interface):
 
     __jsonable__ = Attribute('JSON-able object.')
+
+
+class IFormat(Interface):
+
+    def format(pval):
+        pass
+
+    def parse(jval):
+        pass

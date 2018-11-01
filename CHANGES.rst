@@ -4,7 +4,7 @@ Changes
 0.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add attr-like decorator.
 
 
 0.1.2 (2018-10-31)
