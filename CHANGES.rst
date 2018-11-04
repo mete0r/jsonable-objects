@@ -4,7 +4,7 @@ Changes
 0.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- full field validation in ``__init__`` of the proxy classes.
 
 
 0.1.3 (2018-11-04)

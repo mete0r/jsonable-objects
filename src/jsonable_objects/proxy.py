@@ -99,8 +99,20 @@ class ProxyClassMetadata(object):
             raise TypeError()
 
         for field in self.field_list:
-            # getter 로 시험해본다.
-            field.get(__jsonable__)
+            # getter 및 proxy, format 으로 시험해본다.
+            item = field.get(__jsonable__)
+            if field.proxy_class is not None:
+                if field.optional:
+                    if item is not None:
+                        field.proxy_class(item)
+                else:
+                    field.proxy_class(item)
+            elif field.format is not None:
+                if field.optional:
+                    if item is not None:
+                        field.format.parse(item)
+                else:
+                    field.format.parse(item)
 
         return __jsonable__
 

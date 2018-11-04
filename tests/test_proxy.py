@@ -495,7 +495,12 @@ class ProxyForDictTest(TestCase):
         self.assertRaises(KeyError, Foo, {})
 
         d = {
-            'uuid': '27d861ac-f27e-4ef5-81af-99d2fcd976a6'
+            'uuid': 'invalid',
+        }
+        self.assertRaises(ValueError, Foo, d)
+
+        d = {
+            'uuid': '27d861ac-f27e-4ef5-81af-99d2fcd976a6',
         }
         foo = Foo(d)
         self.assertEquals(
@@ -506,6 +511,56 @@ class ProxyForDictTest(TestCase):
         foo.uuid = uuid
         self.assertEquals(uuid, foo.uuid)
         self.assertEquals('b827a618-ac92-4de7-a12a-29c457de3000', d['uuid'])
+
+    def test_format_optional(self):
+        from jsonable_objects.interfaces import IFormat
+        from jsonable_objects.proxy import proxy
+        from jsonable_objects.proxy import Field
+
+        @implementer(IFormat)
+        class UUIDFormat(object):
+
+            def format(self, pyobj):
+                return str(pyobj)
+
+            def parse(self, jsonableval):
+                return UUID(jsonableval)
+
+        uuidFormat = UUIDFormat()
+
+        @proxy(dict)
+        class Foo(object):
+            uuid = Field(type=str, optional=True, format=uuidFormat)
+
+        d = {
+        }
+        foo = Foo(d)
+        self.assertEquals(None, foo.uuid)
+
+        d = {
+            'uuid': 'invalid',
+        }
+        self.assertRaises(ValueError, Foo, d)
+
+        d = {
+            'uuid': '27d861ac-f27e-4ef5-81af-99d2fcd976a6',
+        }
+        foo = Foo(d)
+        self.assertEquals(
+            UUID('27d861ac-f27e-4ef5-81af-99d2fcd976a6'),
+            foo.uuid,
+        )
+        uuid = UUID('b827a618-ac92-4de7-a12a-29c457de3000')
+        foo.uuid = uuid
+        self.assertEquals(uuid, foo.uuid)
+        self.assertEquals('b827a618-ac92-4de7-a12a-29c457de3000', d['uuid'])
+
+        foo.uuid = None
+        self.assertEquals(None, foo.uuid)
+        self.assertEquals(None, d['uuid'])
+        del foo.uuid
+        self.assertEquals(None, foo.uuid)
+        self.assertTrue('uuid' not in d)
 
     def test_proxy_type_mismatch(self):
         from jsonable_objects.proxy import proxy
@@ -979,7 +1034,12 @@ class ProxyForListTest(TestCase):
         self.assertRaises(IndexError, Foo, [])
 
         d = [
-            '27d861ac-f27e-4ef5-81af-99d2fcd976a6'
+            'invalid',
+        ]
+        self.assertRaises(ValueError, Foo, d)
+
+        d = [
+            '27d861ac-f27e-4ef5-81af-99d2fcd976a6',
         ]
         foo = Foo(d)
         self.assertEquals(
@@ -990,6 +1050,53 @@ class ProxyForListTest(TestCase):
         foo.uuid = uuid
         self.assertEquals(uuid, foo.uuid)
         self.assertEquals('b827a618-ac92-4de7-a12a-29c457de3000', d[0])
+
+    def test_format_optional(self):
+        from jsonable_objects.interfaces import IFormat
+        from jsonable_objects.proxy import proxy
+        from jsonable_objects.proxy import Field
+
+        @implementer(IFormat)
+        class UUIDFormat(object):
+
+            def format(self, pyobj):
+                return str(pyobj)
+
+            def parse(self, jsonableval):
+                return UUID(jsonableval)
+
+        uuidFormat = UUIDFormat()
+
+        @proxy(list)
+        class Foo(object):
+            uuid = Field(type=str, optional=True, format=uuidFormat)
+
+        self.assertRaises(IndexError, Foo, [])
+
+        d = [
+            'invalid',
+        ]
+        self.assertRaises(ValueError, Foo, d)
+
+        d = [
+            '27d861ac-f27e-4ef5-81af-99d2fcd976a6',
+        ]
+        foo = Foo(d)
+        self.assertEquals(
+            UUID('27d861ac-f27e-4ef5-81af-99d2fcd976a6'),
+            foo.uuid,
+        )
+        uuid = UUID('b827a618-ac92-4de7-a12a-29c457de3000')
+        foo.uuid = uuid
+        self.assertEquals(uuid, foo.uuid)
+        self.assertEquals('b827a618-ac92-4de7-a12a-29c457de3000', d[0])
+
+        foo.uuid = None
+        self.assertEquals(None, foo.uuid)
+        self.assertEquals(None, d[0])
+        del foo.uuid
+        self.assertEquals(None, foo.uuid)
+        self.assertEquals(None, d[0])
 
     def test_proxy_type_mismatch(self):
         from jsonable_objects.proxy import proxy
