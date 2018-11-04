@@ -5,6 +5,7 @@ Changes
 ------------------
 
 - full field validation in ``__init__`` of the proxy classes.
+- loose field setting restriction if a format is given.
 
 
 0.1.3 (2018-11-04)

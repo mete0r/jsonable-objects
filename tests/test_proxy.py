@@ -666,6 +666,79 @@ class ProxyForDictTest(TestCase):
         self.assertEquals(None, foo.bar)
         self.assertTrue('bar' not in d)
 
+    def test_proxy_and_format(self):
+        from jsonable_objects.interfaces import IFormat
+        from jsonable_objects.proxy import proxy
+        from jsonable_objects.proxy import Field
+
+        @proxy(dict)
+        class Bar(object):
+            id = Field(type=int)
+
+        class BarRecord(object):
+
+            def __init__(self, id):
+                self.id = int(id)
+
+        @implementer(IFormat)
+        class BarRecordFormat(object):
+
+            def format(self, pobj):
+                return {
+                    'id': pobj.id,
+                }
+
+            def parse(self, jobj):
+                id = jobj['id']
+                return BarRecord(id)
+
+        barFormat = BarRecordFormat()
+
+        @proxy(dict)
+        class Foo(object):
+            bar = Field(type=dict, optional=True, proxy=Bar, format=barFormat)
+
+        d = {
+        }
+        foo = Foo(d)
+        self.assertEquals(None, foo.bar)
+
+        d = {
+            'bar': None,
+        }
+        foo = Foo(d)
+        self.assertEquals(None, foo.bar)
+
+        d = {
+            'bar': {
+                'id': 1,
+            },
+        }
+        foo = Foo(d)
+        self.assertEquals(1, foo.bar.id)
+
+        b = {
+            'id': 2,
+        }
+        foo.bar = Bar(b)
+        self.assertEquals(2, foo.bar.id)
+        self.assertTrue(b is d['bar'])
+
+        foo.bar = BarRecord(3)
+        self.assertEquals(3, foo.bar.id)
+        self.assertEquals(3, d['bar']['id'])
+
+        self.assertRaises(TypeError, setattr, foo, 'bar', 123)
+        self.assertRaises(TypeError, setattr, foo, 'bar', [])
+
+        foo.bar = None
+        self.assertEquals(None, foo.bar)
+        self.assertEquals(None, d['bar'])
+
+        del foo.bar
+        self.assertEquals(None, foo.bar)
+        self.assertTrue('bar' not in d)
+
     def test_inheritance_incompatible(self):
         from jsonable_objects.proxy import proxy
         from jsonable_objects.proxy import Field

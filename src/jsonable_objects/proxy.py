@@ -416,14 +416,35 @@ def __make_property(field):
     def setter(self, value):
         field.set(self.__jsonable__, value)
 
+    # getter 는 proxy_class / format 중 하나만 사용한다.
+    getting_value = None
     if field.proxy_class is not None:
-        proxified_getting = __proxified_getting_value(field.proxy_class)
-        proxified_setting = __proxified_setting_value(field.proxy_class)
-        getter = __decorate_getter(getter, proxified_getting)
-        setter = __decorate_setter(setter, proxified_setting)
+        getting_value = __proxified_getting_value(field.proxy_class)
     elif field.format is not None:
-        getter = __decorate_getter(getter, field.format.parse)
-        setter = __decorate_setter(setter, field.format.format)
+        getting_value = field.format.parse
+
+    # setter 는 proxy_class / format 둘 다 정의되어 있으면
+    # proxy_class 가 아닌 입력도 format으로 변환 시도한다.
+    setting_value = None
+    if field.proxy_class is not None and field.format is None:
+        setting_value = __proxified_setting_value(field.proxy_class)
+    elif field.proxy_class is None and field.format is not None:
+        # NOTE: format should check valid input
+        setting_value = field.format.format
+    elif field.proxy_class is not None and field.format is not None:
+        def setting_value(value):
+            if isinstance(value, field.proxy_class):
+                return value.__jsonable__
+            try:
+                # NOTE: format should check valid input
+                return field.format.format(value)
+            except Exception:
+                raise TypeError()
+
+    if getting_value is not None:
+        getter = __decorate_getter(getter, getting_value)
+    if setting_value is not None:
+        setter = __decorate_setter(setter, setting_value)
 
     if field.delete is None:
         return property(getter, setter)
