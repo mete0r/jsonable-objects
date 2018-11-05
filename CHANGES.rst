@@ -4,7 +4,7 @@ Changes
 0.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- typed mapping/sequence proxy.
 
 
 0.1.4 (2018-11-04)
