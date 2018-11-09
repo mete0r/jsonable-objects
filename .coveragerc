@@ -7,3 +7,11 @@ source =
 	src/jsonable_objects
 	.tox/*/lib/python*/site-packages/jsonable_objects
 	.tox/pypy*/site-packages/jsonable_objects
+
+
+[html]
+directory = build/htmlcov
+
+
+[xml]
+output = build/coverage.xml
