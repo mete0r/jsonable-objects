@@ -1,7 +1,7 @@
 Changes
 =======
 
-0.1.5 (unreleased)
+0.1.5 (2018-11-11)
 ------------------
 
 - typed mapping/sequence proxy.
