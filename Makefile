@@ -70,7 +70,7 @@ all: $(REQUIREMENTS_FILES) update-requirements
 .PHONY: update-requirements
 update-requirements: .pip-sync
 .pip-sync: requirements/dev.txt
-	$(VENV) pip-sync $(FIND_LINKS) $(PIP_NO_INDEX) $^
+	$(VENV) pip install $(FIND_LINKS) $(PIP_NO_INDEX) -r $^
 	$(VENV) pip freeze > $@.tmp && mv $@.tmp $@
 
 requirements.txt: $(REQUIREMENTS_IN)
@@ -109,7 +109,7 @@ notebook:
 .PHONY: test
 test: requirements/test.txt
 	$(VENV) coverage erase
-	$(VENV) detox -e py27,py34,pypy
+	$(VENV) tox -p auto -e py38,pypy3
 	$(VENV) coverage combine
 	$(VENV) coverage report
 	$(VENV) coverage html
