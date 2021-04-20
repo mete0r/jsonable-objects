@@ -4,19 +4,23 @@
 #
 #    pip-compile --find-links=virtualenv_support --output-file=requirements/test.txt requirements.in requirements/setup.in requirements/test.in
 #
---find-links virtualenv_support
-
-attrs==19.3.0             # via pytest
-coverage==5.1             # via -r requirements/test.in
-more-itertools==8.2.0     # via pytest
-packaging==20.3           # via pytest
-pluggy==0.13.1            # via pytest
-py==1.8.1                 # via pytest
-pyparsing==2.4.7          # via packaging
-pytest==5.4.1             # via -r requirements/test.in
-six==1.14.0               # via packaging
-wcwidth==0.1.9            # via pytest
-zope.interface==5.1.0     # via -r requirements.in
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
+attrs==19.3.0
+    # via pytest
+coverage==5.1
+    # via -r test.in
+more-itertools==8.2.0
+    # via pytest
+packaging==20.3
+    # via pytest
+pluggy==0.13.1
+    # via pytest
+py==1.10.0
+    # via pytest
+pyparsing==2.4.7
+    # via packaging
+pytest==5.4.1
+    # via -r test.in
+six==1.14.0
+    # via packaging
+wcwidth==0.1.9
+    # via pytest
